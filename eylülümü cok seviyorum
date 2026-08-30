@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eylülüm ❤️</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, #40152d 0%, #180b18 45%, #08050b 100%);
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    /* Müzik */
+    .music-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1000;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.1);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: .3s;
+    }
+
+    .music-btn:hover {
+      background: rgba(255,255,255,.2);
+    }
+
+    /* Kalpler */
+    .heart {
+      position: fixed;
+      bottom: -40px;
+      color: #ff6b9d;
+      font-size: 20px;
+      pointer-events: none;
+      animation: rise linear forwards;
+      z-index: 1;
+      opacity: .8;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: .8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Ana içerik */
+    .container {
+      position: relative;
+      z-index: 5;
+      width: min(900px, 92%);
+      margin: auto;
+      padding: 90px 20px 60px;
+    }
+
+    .intro {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .small {
+      color: #ff9fbd;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      margin-bottom: 18px;
+      animation: fadeIn 2s ease;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 10vw, 6.5rem);
+      color: #fff;
+      text-shadow:
+        0 0 10px #ff3d7f,
+        0 0 30px #ff3d7f,
+        0 0 60px rgba(255,61,127,.6);
+      animation: heartbeat 2s infinite;
+    }
+
+    .subtitle {
+      margin-top: 20px;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: #ffd5e1;
+      font-style: italic;
+    }
+
+    .scroll {
+      margin-top: 70px;
+      color: #ffabc4;
+      animation: bounce 1.8s infinite;
+    }
+
+    /* Mesaj */
+    .message {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,180,205,.18);
+      border-radius: 25px;
+      padding: clamp(25px, 5vw, 55px);
+      line-height: 1.9;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      margin-bottom: 120px;
+    }
+
+    .message h2 {
+      color: #ff9fbd;
+      margin-bottom: 25px;
+      font-size: 2rem;
+    }
+
+    .message p {
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: #ff7fa8;
+      font-weight: bold;
+    }
+
+    /* Soru */
+    .question {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .question h2 {
+      font-size: clamp(2rem, 7vw, 4rem);
+      margin-bottom: 45px;
+      text-shadow: 0 0 25px rgba(255,100,150,.7);
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      min-height: 100px;
+      width: 100%;
+      position: relative;
+    }
+
+    button.answer {
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 16px 30px;
+      border-radius: 50px;
+      transition:
+        transform .45s ease,
+        font-size .45s ease,
+        padding .45s ease,
+        opacity .45s ease;
+    }
+
+    #yes {
+      background: linear-gradient(135deg, #ff3d7f, #ff6fa0);
+      color: white;
+      box-shadow: 0 0 25px rgba(255,61,127,.65);
+      transform: scale(1);
+      z-index: 20;
+    }
+
+    #no {
+      background: rgba(255,255,255,.12);
+      color: #eee;
+      border: 1px solid rgba(255,255,255,.2);
+      z-index: 10;
+    }
+
+    /* Final */
+    .final {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background:
+        radial-gradient(circle, #5b1639 0%, #190818 55%, #050308 100%);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 30px;
+    }
+
+    .final.show {
+      display: flex;
+      animation: finalIn 1.2s ease forwards;
+    }
+
+    .final h2 {
+      font-size: clamp(3rem, 10vw, 7rem);
+      color: #fff;
+      text-shadow:
+        0 0 15px #ff3d7f,
+        0 0 40px #ff3d7f,
+        0 0 80px #ff3d7f;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    .final p {
+      margin-top: 25px;
+      max-width: 700px;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      line-height: 1.7;
+      color: #ffdce7;
+    }
+
+    .final .big-heart {
+      font-size: 5rem;
+      margin-top: 25px;
+      animation: heartbeat 1s infinite;
+    }
+
+    /* Animasyonlar */
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(12px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes finalIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .buttons {
+        gap: 10px;
+      }
+
+      button.answer {
+        padding: 14px 22px;
+        font-size: 1rem;
+      }
+
+      .message {
+        line-height: 1.75;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MÜZİK -->
+  <!-- Kendi izinli MP3 dosyanı aynı klasöre "muzik.mp3" adıyla koy -->
+  <audio id="music" loop>
+    <source src="muzik.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-btn" id="musicBtn">🎵 Müziği Aç</button>
+
+  <main class="container">
+
+    <!-- GİRİŞ -->
+    <section class="intro">
+
+      <div class="small">SANA SÖYLEMEK İSTEDİĞİM BİR ŞEY VAR...</div>
+
+      <h1>Eylülüm ❤️</h1>
+
+      <div class="subtitle">
+        Prensesim... Gülüm... Her şeyim...
+      </div>
+
+      <div class="scroll">
+        Aşağı kaydır ↓
+      </div>
+
+    </section>
+
+
+    <!-- MESAJ -->
+    <section class="message">
+
+      <h2>Eylülüm, Prensesim, Gülüm ❤️</h2>
+
+      <p>
+        Sana bunları sadece beni affet diye değil,
+        içimde kalanları gerçekten sana anlatabilmek için yazıyorum.
+      </p>
+
+      <p>
+        Biliyorum, seni üzdüm ve yaptığım hatanın sende nasıl
+        bir his bıraktığını belki tamamen anlayamam.
+        Ama şunu bilmeni istiyorum:
+        <span class="highlight">
+          Seni kırmak, üzmek ya da kaybetme ihtimalini bile düşünmek istemiyorum.
+        </span>
+      </p>
+
+      <p>
+        Ben seni gerçekten çok seviyorum.
+        Herkes bir yana, <span class="highlight">sen bir yanasın.</span>
+        Benim için senin yerin başka.
+        Bunu bazen sana yeterince gösterememiş olabilirim
+        ama kalbimdeki yerin hiçbir zaman değişmedi.
+      </p>
+
+      <p>
+        Sana söz veriyorum, bir daha aynı hatayı yapmayacağım.
+        Sadece "yapmayacağım" demek istemiyorum;
+        bunu davranışlarımla sana göstermek istiyorum.
+        Kendimi düzeltmek, eksiklerimi görmek ve sana hak ettiğin
+        sevgiyi göstermek istiyorum.
+      </p>
+
+      <p>
+        Ben senden her şeyi bir anda unutmanı istemiyorum.
+        Senden sadece <span class="highlight">
+        bana kendimi düzeltmem için bir şans vermeni</span> istiyorum.
+      </p>
+
+      <p>
+        Çünkü ben seni bırakmak istemiyorum.
+        Ne olursa olsun senden vazgeçmek istemiyorum.
+        Sen benim için gelip geçici biri değilsin Eylülüm.
+        <span class="highlight">
+        Sen benim hayatımda kalmasını istediğim insansın.
+        </span>
+      </p>
+
+      <p>
+        Belki şu an bana kızgınsın,
+        belki bana güvenmekte zorlanıyorsun.
+        Buna da kızamam.
+        Çünkü güvenin sözlerle değil,
+        zamanla ve davranışlarla kazanıldığını biliyorum.
+      </p>
+
+      <p>
+        O yüzden senden tek istediğim şey şu:
+      </p>
+
+      <p class="highlight" style="font-size: 1.3em;">
+        Bana kendimi düzeltmem için izin ver.
+      </p>
+
+      <p>
+        Bırak sana gerçekten değişebildiğimi göstereyim.
+        Bırak seni ne kadar sevdiğimi sadece sözlerimle değil,
+        yaptıklarımla da göstereyim.
+      </p>
+
+      <p>
+        Eylülüm...
+        Seni çok seviyorum.
+        Seni kaybetmek istemiyorum.
+        Ve senden bir mucize istemiyorum.
+      </p>
+
+      <p>
+        Sadece bir şans istiyorum.
+        <span class="highlight">
+          Beni affetmen için değil,
+          affedilmeyi hak edecek insan olabilmem için bir şans.
+        </span>
+      </p>
+
+    </section>
+
+
+    <!-- SORU -->
+    <section class="question">
+
+      <h2>Beni affeder misin? 🥺❤️</h2>
+
+      <div class="buttons">
+
+        <button class="answer" id="yes">
+          EVET ❤️
+        </button>
+
+        <button class="answer" id="no">
+          HAYIR 🥺
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FİNAL -->
+  <section class="final" id="final">
+
+    <h2>EVET! ❤️</h2>
+
+    <p>
+      Eylülüm, prensesim, gülüm...<br>
+      Bana bir şans verdiğin için teşekkür ederim. ❤️<br><br>
+      Sana verdiğim sözü tutacağım.
+      Seni üzmemek ve kendimi düzeltmek için elimden geleni yapacağım.
+      <br><br>
+      <strong>Herkes bir yana, sen bir yana. ❤️</strong>
+    </p>
+
+    <div class="big-heart">❤️</div>
+
+  </section>
+
+
+  <script>
+
+    /* =========================
+       MÜZİK
+    ========================= */
+
+    const music = document.getElementById("music");
+    const musicBtn = document.getElementById("musicBtn");
+
+    musicBtn.addEventListener("click", () => {
+
+      if (music.paused) {
+        music.play()
+          .then(() => {
+            musicBtn.textContent = "⏸️ Müziği Durdur";
+          })
+          .catch(() => {
+            alert("Müzik dosyası bulunamadı. GitHub klasörüne muzik.mp3 eklediğinden emin ol.");
+          });
+
+      } else {
+        music.pause();
+        musicBtn.textContent = "🎵 Müziği Aç";
+      }
+
+    });
+
+
+    /* =========================
+       UÇUŞAN KALPLER
+    ========================= */
+
+    function createHeart() {
+
+      const heart = document.createElement("div");
+
+      heart.className = "heart";
+
+      const hearts = ["❤️", "💕", "💗", "💖", "💘"];
+
+      heart.textContent =
+        hearts[Math.floor(Math.random() * hearts.length)];
+
+      heart.style.left =
+        Math.random() * 100 + "vw";
+
+      heart.style.fontSize =
+        (12 + Math.random() * 22) + "px";
+
+      heart.style.animationDuration =
+        (5 + Math.random() * 5) + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 10000);
+    }
+
+    setInterval(createHeart, 650);
+
+
+    /* =========================
+       EVET / HAYIR
+    ========================= */
+
+    const yes = document.getElementById("yes");
+    const no = document.getElementById("no");
+    const final = document.getElementById("final");
+
+    let yesScale = 1;
+    let noScale = 1;
+
+    no.addEventListener("click", () => {
+
+      yesScale += 0.55;
+      noScale -= 0.12;
+
+      if (noScale < 0.25) {
+        noScale = 0.25;
+      }
+
+      yes.style.transform =
+        `scale(${yesScale})`;
+
+      no.style.transform =
+        `scale(${noScale})`;
+
+      /*
+        Çok büyüdüğünde EVET ekranı kaplayacak.
+      */
+
+      if (yesScale >= 7) {
+
+        yes.style.position = "fixed";
+        yes.style.inset = "0";
+        yes.style.width = "100vw";
+        yes.style.height = "100vh";
+        yes.style.borderRadius = "0";
+        yes.style.fontSize = "clamp(2rem, 8vw, 6rem)";
+        yes.style.transform = "scale(1)";
+
+        no.style.opacity = "0";
+        no.style.pointerEvents = "none";
+
+      }
+
+    });
+
+
+    /* =========================
+       EVET'E BASINCA
+       ========================= */
+
+    yes.addEventListener("click", () => {
+
+      final.classList.add("show");
+
+      launchFireworks();
+
+    });
+
+
+    /* =========================
+       HAVAİ FİŞEKLER
+    ========================= */
+
+    function launchFireworks() {
+
+      const canvas = document.createElement("canvas");
+
+      canvas.style.position = "fixed";
+      canvas.style.inset = "0";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.pointerEvents = "none";
+      canvas.style.zIndex = "600";
+
+      document.body.appendChild(canvas);
+
+      const ctx = canvas.getContext("2d");
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resize();
+
+      window.addEventListener("resize", resize);
+
+      let particles = [];
+
+      function firework() {
+
+        const x =
+          Math.random() * canvas.width;
+
+        const y =
+          100 + Math.random() * canvas.height * 0.45;
+
+        const colors = [
+          "#ff3d7f",
+          "#ff85aa",
+          "#ffd1dc",
+          "#ffffff",
+          "#ffcc66"
+        ];
+
+        const color =
+          colors[Math.floor(Math.random() * colors.length)];
+
+        for (let i = 0; i < 80; i++) {
+
+          const angle =
+            Math.random() * Math.PI * 2;
+
+          const speed =
+            Math.random() * 6 + 2;
+
+          particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color: color,
+            gravity: 0.045
+          });
+
+        }
+
+      }
+
+      function animate() {
+
+        ctx.fillStyle = "rgba(5, 3, 8, 0.18)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p, index) => {
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.alpha -= 0.012;
+
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (p.alpha <= 0) {
+            particles.splice(index, 1);
+          }
+
+        });
+
+        ctx.globalAlpha = 1;
+
+        requestAnimationFrame(animate);
+
+      }
+
+      animate();
+
+      /* İlk havai fişekler */
+      firework();
+
+      setTimeout(firework, 400);
+      setTimeout(firework, 800);
+      setTimeout(firework, 1200);
+      setTimeout(firework, 1700);
+      setTimeout(firework, 2200);
+      setTimeout(firework, 2800);
+
+    }
+
+  </script>
+
+</body>
+</html>
